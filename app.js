@@ -1,17 +1,26 @@
+// Attente du chargement complet du DOM et des ressources pour ne pas bloquer le thread principal
+window.addEventListener('load', () => {
 
-// On demande au navigateur s'il connait la technologie service workers
-if ('serviceWorker' in navigator) {
-    // On attend que la page soit chargée
-    window.addEventListener('load', () => {
-        // On donne le fichier sw à l'application
+    // Vérification de la compatibilité du navigateur avec les Service Workers
+    if ('serviceWorker' in navigator) {
+
+        // Enregistrement du Service Worker (SW) à la racine du scope
         navigator.serviceWorker.register('/sw.js')
-            // Réussite
-            .then(registration => {
-                console.log('Service Worker enregistré avec succès avec la portée :', registration.scope);
+            .then((registration) => {
+                // Confirmation de l'enregistrement et affichage du périmètre d'action (scope)
+                console.log('Service Worker enregistré avec succès !');
+                console.log('Scope :', registration.scope);
             })
-            // Echec
-            .catch(error => {
+            .catch((error) => {
+                // Gestion des erreurs lors de l'initialisation du SW
                 console.error('Échec de l\'enregistrement du Service Worker :', error);
             });
-    });
-}
+
+    } else {
+        console.log('Les Service Workers ne sont pas supportés par ce navigateur.');
+    }
+});
+
+// Monitoring de l'état de la connectivité réseau
+window.addEventListener('online', () => console.log('Mode en ligne activé'));
+window.addEventListener('offline', () => console.log('Mode hors-ligne détecté'));
