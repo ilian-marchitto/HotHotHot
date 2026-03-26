@@ -1,0 +1,36 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="stylesheet" href="style.css">
+    <link rel="stylesheet" href="header.css">
+    <link rel="stylesheet" href="footer.css">
+    <script defer type="module" src="script.js"></script>
+    <title>TD1</title>
+</head>
+<body>
+    <header id="main-header"></header>
+
+    <h1 id="dialogTitre">Exercice 1 : Génération de valeurs aléatoires</h1>
+    <button id="afficherPartieTemperature">Afficher la partie température</button>
+    <button id="afficherPartieHistorique">Afficher la partie historique</button>
+
+    <section id="partieTemprature" role="dialog" aria-labelledby="dialogTitre" aria-describedby="dialogTemperature">
+        <h2 role="alert" id="commentaire"></h2>
+        <div id="bordure" aria-live='assertive'>
+            <p id="dialogTemperature">Température : <meter id="temperatureMeter" min="-10" max="40" low="-1" optimum="20" high="30"></meter> <span id="O_firstValue" data-unit="°C"></span>°C </p>
+        </div>
+    </section>
+    
+
+    <section id="partieHistorique" role="region" aria-labelledby="historiqueTitre">
+        <ul id="historique" aria-live="polite">
+            <h2 id="historiqueTitre">Historique des températures :</h2>
+        </ul>
+    </section>
+
+    <footer id="main-footer"></footer>
+</body>
+
+</html>
