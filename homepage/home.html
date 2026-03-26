@@ -1,0 +1,44 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="stylesheet" href="style.css">
+    <link rel="manifest" href="manifest.json">
+    <script defer type="module" src="script.js"></script>
+    <title>HotHotHot - Domotique</title>
+</head>
+<body>
+    <h1>Projet HotHotHot : Gestion des Capteurs</h1>
+
+    <div role="tablist">
+        <button id="btnTemp" role="tab" aria-selected="true" aria-controls="partieTemprature">Températures</button>
+        <button id="btnHist" role="tab" aria-selected="false" aria-controls="partieHistorique">Historique</button>
+    </div>
+
+    <section id="partieTemprature" role="tabpanel">
+        <div id="bordure_interieur" class="capteur-card bordure-verte">
+            <h3>Capteur Intérieur</h3>
+            <p>Actuelle : <span id="O_firstValue_interieur">--</span>°C</p>
+            <p>Min : <span id="tempMin_interieur">--</span> | Max : <span id="tempMax_interieur">--</span></p>
+            <meter id="temperatureMeter_interieur" min="-10" max="40"></meter>
+            <p id="commentaire_interieur" hidden></p>
+        </div>
+
+        <hr>
+
+        <div id="bordure_exterieur" class="capteur-card bordure-verte">
+            <h3>Capteur Extérieur</h3>
+            <p>Actuelle : <span id="O_firstValue_exterieur">--</span>°C</p>
+            <p>Min : <span id="tempMin_exterieur">--</span> | Max : <span id="tempMax_exterieur">--</span></p>
+            <meter id="temperatureMeter_exterieur" min="-10" max="40"></meter>
+            <p id="commentaire_exterieur" hidden></p>
+        </div>
+    </section>
+
+    <section id="partieHistorique" role="tabpanel" hidden>
+        <h2>Historique des données</h2>
+        <ul id="historique" aria-live="polite"></ul>
+    </section>
+</body>
+</html>
