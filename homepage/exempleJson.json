@@ -1,0 +1,124 @@
+{
+  "capteurs": [
+    {
+      "type": "Thermique",
+      "Nom": "Salon_Principal",
+      "Valeur": "20.5",
+      "Timestamp": 1700000000
+    },
+    {
+      "type": "Thermique",
+      "Nom": "Cuisine",
+      "Valeur": "22.1",
+      "Timestamp": 1700000000
+    },
+    {
+      "type": "Thermique",
+      "Nom": "Chambre_Parents",
+      "Valeur": "19.0",
+      "Timestamp": 1700000000
+    },
+    {
+      "type": "Thermique",
+      "Nom": "Chambre_Enfant",
+      "Valeur": "19.5",
+      "Timestamp": 1700000000
+    },
+    {
+      "type": "Thermique",
+      "Nom": "Salle_de_Bain",
+      "Valeur": "24.0",
+      "Timestamp": 1700000000
+    },
+    {
+      "type": "Thermique",
+      "Nom": "Exterieur_Nord",
+      "Valeur": "12.4",
+      "Timestamp": 1700000000
+    },
+    {
+      "type": "Thermique",
+      "Nom": "Cave_Vin",
+      "Valeur": "14.0",
+      "Timestamp": 1700000000
+    },
+    {
+      "type": "Hygrometrie",
+      "Nom": "Salon_Principal",
+      "Valeur": "45",
+      "Timestamp": 1700000000
+    },
+    {
+      "type": "Hygrometrie",
+      "Nom": "Salle_de_Bain",
+      "Valeur": "78",
+      "Timestamp": 1700000000
+    },
+    {
+      "type": "Hygrometrie",
+      "Nom": "Exterieur",
+      "Valeur": "60",
+      "Timestamp": 1700000000
+    },
+    {
+      "type": "CO2",
+      "Nom": "Salon_Air",
+      "Valeur": "850",
+      "Timestamp": 1700000000
+    },
+    {
+      "type": "CO2",
+      "Nom": "Chambre_Parents_Air",
+      "Valeur": "420",
+      "Timestamp": 1700000000
+    },
+    {
+      "type": "Luminosite",
+      "Nom": "Salon_Fenetre",
+      "Valeur": "450",
+      "Timestamp": 1700000000
+    },
+    {
+      "type": "Luminosite",
+      "Nom": "Jardin",
+      "Valeur": "12000",
+      "Timestamp": 1700000000
+    },
+    {
+      "type": "Presence",
+      "Nom": "Couloir_Entree",
+      "Valeur": "1",
+      "Timestamp": 1700000000
+    },
+    {
+      "type": "Presence",
+      "Nom": "Garage",
+      "Valeur": "0",
+      "Timestamp": 1700000000
+    },
+    {
+      "type": "Bruit",
+      "Nom": "Salon_Decibel",
+      "Valeur": "42",
+      "Timestamp": 1700000000
+    },
+    {
+      "type": "Pression",
+      "Nom": "Barometre",
+      "Valeur": "1013",
+      "Timestamp": 1700000000
+    },
+    {
+      "type": "Batterie",
+      "Nom": "Niveau_Capteur_Salon",
+      "Valeur": "88",
+      "Timestamp": 1700000000
+    },
+    {
+      "type": "Systeme",
+      "Nom": "Charge_CPU",
+      "Valeur": "15",
+      "Timestamp": 1700000000
+    }
+  ]
+}
