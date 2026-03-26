@@ -1,9 +1,12 @@
 {
+    "id": "/",
     "name": "HotHotHot",
     "short_name": "Hot3x",
     "description": "Première Progressive Application Web",
     "start_url": "/index.html",
     "display": "standalone",
+    "orientation": "portrait",
+    "lang": "fr",
     "background_color": "#ffffff",
     "theme_color": "#317EFB",
     "icons": [
