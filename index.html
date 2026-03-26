@@ -1,30 +1,16 @@
 <!DOCTYPE html>
 <html lang="en">
+
 <head>
     <link rel="manifest" href="/manifest.json">
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>HotHotHot</title>
+    <script src="app.js" defer></script>
 </head>
-<script>
-    // On demande au navigateur s'il connait la technologie service workers
-    if ('serviceWorker' in navigator) {
-            // On attend que la page soit chargée
-            window.addEventListener('load', () => {
-                // On donne le fichier sw à l'application
-                navigator.serviceWorker.register('/sw.js')
-                    // Réussite
-                    .then(registration => {
-                        console.log('Service Worker enregistré avec succès avec la portée :', registration.scope);
-                    })
-                    // Echec
-                    .catch(error => {
-                        console.error('Échec de l\'enregistrement du Service Worker :', error);
-                    });
-            });
-        }
-</script>
+
 <body>
     <h1>HotHotHot</h1>
 </body>
+
 </html>
