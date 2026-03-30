@@ -86,7 +86,7 @@ header .btn-logout:hover {
     border-radius: 5px;
     font-weight: bold;
     cursor: pointer;
-    display: flex;
+    display: none;
     align-items: center;
     gap: 8px;
     transition: all 0.3s ease;
