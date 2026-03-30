@@ -1,10 +1,12 @@
+import { APP_CONFIG } from "../../config.js";
+
 export async function chargerLayout() {
     try {
-        const respHeader = await fetch('./header.html');
+        const respHeader = await fetch(`${APP_CONFIG.PATHS.SRC.VIEWS}header.html`);
         const htmlHeader = await respHeader.text();
         document.getElementById('main-header').innerHTML = htmlHeader;
 
-        const respFooter = await fetch('./footer.html');
+        const respFooter = await fetch(`${APP_CONFIG.PATHS.SRC.VIEWS}footer.html`);
         const htmlFooter = await respFooter.text();
         document.getElementById('main-footer').innerHTML = htmlFooter;
 
@@ -18,7 +20,7 @@ export async function chargerLayout() {
 
 function gererAffichageConnexion() {
     const estConnecte = localStorage.getItem('estConnecte') === 'true';
-    
+
     const menuCompte = document.getElementById('menu-mon-compte');
     const liConnexion = document.getElementById('li-connexion');
     const liDeconnexion = document.getElementById('li-deconnexion');
