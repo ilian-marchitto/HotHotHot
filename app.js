@@ -23,33 +23,35 @@ window.addEventListener('load', () => {
 
 // On crée une variable globale pour stocker l'événement d'installation
 let deferredPrompt;
-const installButton = document.getElementById('btn-install');
 
 window.addEventListener('beforeinstallprompt', (e) => {
     // On empêche le navigateur d'afficher le mini-bandeau d'installation
     e.preventDefault();
     deferredPrompt = e;
     // On affiche le bouton HTML personnalisé
-    installButton.style.display = 'block';
+    const installBtn = document.getElementById('btn-install');
+    if (installBtn) installBtn.style.display = 'block';
 });
 
-installButton.addEventListener('click', async () => {
-    // Si on n'a pas sauvegardé l'événement, on ne fait rien
-    if (!deferredPrompt) {
-        return;
+document.body.addEventListener('click', async (event) => {
+    // Si l'élément cliqué a l'ID 'btn-install' (peu importe quand il a été créé !)
+    if (event.target && event.target.id === 'btn-install') {
+
+        if (!deferredPrompt) {
+            return;
+        }
+
+        // On lance le pop-up d'installation
+        deferredPrompt.prompt();
+        const { outcome } = await deferredPrompt.userChoice;
+        console.log(`Résultat de l'installation : ${outcome}`);
+
+        // On vide la variable
+        deferredPrompt = null;
+
+        // On cache le bouton
+        event.target.style.display = 'none';
     }
-
-    // On déclenche l'affichage du pop-up d'installation natif du système
-    deferredPrompt.prompt();
-
-    // On attend de voir ce que l'utilisateur a choisi
-    const { outcome } = await deferredPrompt.userChoice;
-    console.log(`Choix de l'utilisateur : ${outcome}`);
-
-    // Peu importe le choix, on ne peut utiliser l'événement qu'une seule fois.
-    // On vide donc la variable et on cache le bouton.
-    deferredPrompt = null;
-    installButton.style.display = 'none';
 });
 
 // Optionnel mais recommandé : Écouter si l'application a bien été installée
