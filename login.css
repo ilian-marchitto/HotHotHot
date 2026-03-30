@@ -1,0 +1,93 @@
+/* --- Style Spécifique Page de Connexion --- */
+.login-container {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    min-height: 70vh; /* Centre le formulaire verticalement */
+}
+
+.login-card {
+    background: #ffffff;
+    padding: 2.5rem;
+    border-radius: 12px;
+    box-shadow: 0 10px 25px rgba(0, 0, 0, 0.1);
+    width: 100%;
+    max-width: 400px;
+    border-top: 5px solid #1e3a8a; /* Rappel du bleu marine */
+}
+
+.login-card h2 {
+    color: #1e3a8a;
+    text-align: center;
+    margin-bottom: 1.5rem;
+    font-size: 1.8rem;
+}
+
+.login-card p {
+    color: #64748b;
+    text-align: center;
+    margin-bottom: 2rem;
+}
+
+/* Style des champs de saisie */
+.form-group {
+    margin-bottom: 1.2rem;
+}
+
+.form-group label {
+    display: block;
+    margin-bottom: 0.5rem;
+    color: #1e293b;
+    font-weight: 600;
+}
+
+.form-group input {
+    width: 100%;
+    padding: 12px 15px;
+    border: 2px solid #e2e8f0;
+    border-radius: 8px;
+    box-sizing: border-box; /* Évite que l'input dépasse */
+    transition: border-color 0.3s ease;
+}
+
+.form-group input:focus {
+    outline: none;
+    border-color: #3b82f6; /* Bleu plus vif au focus */
+}
+
+/* Bouton de validation */
+.btn-submit {
+    width: 100%;
+    background-color: #1e3a8a;
+    color: white;
+    padding: 14px;
+    border: none;
+    border-radius: 8px;
+    font-size: 1rem;
+    font-weight: bold;
+    cursor: pointer;
+    transition: background-color 0.3s ease, transform 0.2s ease;
+    margin-top: 1rem;
+}
+
+.btn-submit:hover {
+    background-color: #2563eb;
+    transform: translateY(-2px);
+}
+
+/* Lien de retour ou mot de passe oublié */
+.login-footer {
+    text-align: center;
+    margin-top: 1.5rem;
+    font-size: 0.9rem;
+}
+
+.login-footer a {
+    color: #dc2626; /* Rappel du rouge */
+    text-decoration: none;
+    font-weight: 500;
+}
+
+.login-footer a:hover {
+    text-decoration: underline;
+}
