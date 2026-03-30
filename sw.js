@@ -2,11 +2,49 @@ const CACHE_NAME = 'hothothot-cache-v1.0.0';
 
 // La liste de tous les fichiers à sauvegarder à l'installation
 const urlsToCache = [
-    '/', // La racine
-    '/index.html', // L'accueil (Exigence 2)
-    '/documentation.html', // La documentation (Exigence 1)
-    '/manifest.json'
-    // Ajouter les différents fichiers
+
+    // --- Fichier à la racine ---
+    '/',
+    '/index.html',
+    '/manifest.json',
+    '/app.js',
+
+    // --- Fichier style ---
+    '/assets/css/footer.css',
+    '/assets/css/header.css',
+    '/assets/css/login.css',
+    '/assets/css/style.css',
+
+    // --- Images ---
+    '/assets/img/icons/apple-touch-icon.png',
+    '/assets/img/icons/favicon-96x96.png',
+    '/assets/img/icons/web-app-manifest-192x192.png',
+    '/assets/img/icons/web-app-manifest-512x512.png',
+
+    // --- Data ---
+    '/assets/data/exempleJson.json',
+
+    // --- les scripts JS ---
+
+    // Components
+    '/src/components/gererHistorique.js',
+    '/src/components/gererValeurTempsReel.js',
+    '/src/components/layout.js',
+
+    // Core
+    '/src/core/script.js',
+    '/src/core/sujetSurEcoute.js',
+
+    //Services
+    '/src/services/donneeAjax.js',
+    '/src/services/genereValeursTemperatures.js',
+
+    // --- Views HTML ---
+    '/src/views/compte.html',
+    '/src/views/documentation.html',
+    '/src/views/footer.html',
+    '/src/views/header.html',
+    '/src/views/login.html'
 ];
 
 self.addEventListener('install', (event) => {
