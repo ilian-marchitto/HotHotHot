@@ -6,25 +6,47 @@
     <link rel="stylesheet" href="style.css">
     <link rel="stylesheet" href="header.css">
     <link rel="stylesheet" href="footer.css">
+    <link rel="manifest" href="manifest.json">
     <script defer type="module" src="script.js"></script>
-    <title>TD1</title>
+    <title>HotHotHot - Domotique</title>
 </head>
 <body>
     <header id="main-header"></header>
 
-    <h1 id="dialogTitre">Exercice 1 : Génération de valeurs aléatoires</h1>
-    <button id="afficherPartieTemperature">Afficher la partie température</button>
-    <button id="afficherPartieHistorique">Afficher la partie historique</button>
+    <h1 id="dialogTitre">Projet HotHotHot : Gestion des Capteurs</h1>
 
-    <section id="partieTemprature" role="dialog" aria-labelledby="dialogTitre" aria-describedby="dialogTemperature">
-        <h2 role="alert" id="commentaire"></h2>
-        <div id="bordure" aria-live='assertive'>
-            <p id="dialogTemperature">Température : <meter id="temperatureMeter" min="-10" max="40" low="-1" optimum="20" high="30"></meter> <span id="O_firstValue" data-unit="°C"></span>°C </p>
+    <div role="tablist">
+        <button id="btnTemp" role="tab" aria-selected="true" aria-controls="partieTemprature">Températures</button>
+        <button id="btnHist" role="tab" aria-selected="false" aria-controls="partieHistorique">Historique</button>
+    </div>
+
+    <section id="partieTemprature" role="tabpanel" aria-labelledby="dialogTitre" aria-describedby="dialogTemperature_interieur">
+
+        <div id="bordure_interieur" class="capteur-card bordure-verte" aria-live="assertive">
+            <h3>Capteur Intérieur</h3>
+            <p id="dialogTemperature_interieur">Température :
+                <meter id="temperatureMeter_interieur" min="-10" max="40" low="-1" optimum="20" high="30"></meter>
+                <span id="O_firstValue_interieur" data-unit="°C">--</span>°C
+            </p>
+            <p>Min : <span id="tempMin_interieur">--</span> | Max : <span id="tempMax_interieur">--</span></p>
+            <p id="commentaire_interieur" hidden></p>
         </div>
-    </section>
-    
 
-    <section id="partieHistorique" role="region" aria-labelledby="historiqueTitre">
+        <hr>
+
+        <div id="bordure_exterieur" class="capteur-card bordure-verte" aria-live="assertive">
+            <h3>Capteur Extérieur</h3>
+            <p id="dialogTemperature_exterieur">Température :
+                <meter id="temperatureMeter_exterieur" min="-10" max="40" low="-1" optimum="20" high="30"></meter>
+                <span id="O_firstValue_exterieur" data-unit="°C">--</span>°C
+            </p>
+            <p>Min : <span id="tempMin_exterieur">--</span> | Max : <span id="tempMax_exterieur">--</span></p>
+            <p id="commentaire_exterieur" hidden></p>
+        </div>
+
+    </section>
+
+    <section id="partieHistorique" role="tabpanel" aria-labelledby="historiqueTitre" hidden>
         <ul id="historique" aria-live="polite">
             <h2 id="historiqueTitre">Historique des températures :</h2>
         </ul>
@@ -32,5 +54,4 @@
 
     <footer id="main-footer"></footer>
 </body>
-
 </html>

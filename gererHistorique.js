@@ -2,9 +2,11 @@ export class C_gererHistorique {
     constructor() {
         this.O_historique = document.getElementById("historique");
     }
-    
-    // Fonction pour ajouter une température à l'historique
-    update(temperature) {
-        this.O_historique.innerHTML += "<li>" + temperature + "°C</li>";
+
+    update(temperature, type) {
+        if (!this.O_historique) return;
+        const label = type === "exterieur" ? "Extérieur" : "Intérieur";
+        const date = new Date().toLocaleTimeString("fr-FR");
+        this.O_historique.innerHTML += `<li>[${date}] ${label} : ${temperature}°C</li>`;
     }
 }

@@ -4,16 +4,16 @@ export class sujetSurEcoute {
         this.currentData = null;
     }
 
-    // On ajoute un observateur
     subscribe(observer) {
         this.observers.push(observer);
     }
 
-    // On notifie tout le monde
     notify() {
-        this.observers.forEach(observer => observer.update(this.currentData.valeur, 10));
+        this.observers.forEach(observer => {
+            observer.update(this.currentData.valeur, this.currentData.type);
+        });
     }
-    
+
     nouvelleMesure(valeur, type, nom, timestamp) {
         this.currentData = {
             valeur: parseFloat(valeur),
@@ -21,7 +21,6 @@ export class sujetSurEcoute {
             nom: nom,
             timestamp: timestamp
         };
-        
         this.notify();
     }
 
