@@ -5,7 +5,6 @@ export async function chargerLayout() {
         const respHeader = await fetch(`${APP_CONFIG.PATHS.SRC.VIEWS}header.html`);
         const htmlHeader = await respHeader.text();
         document.getElementById('main-header').innerHTML = htmlHeader;
-
         const respFooter = await fetch(`${APP_CONFIG.PATHS.SRC.VIEWS}footer.html`);
         const htmlFooter = await respFooter.text();
         document.getElementById('main-footer').innerHTML = htmlFooter;
