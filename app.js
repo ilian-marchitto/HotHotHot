@@ -96,7 +96,7 @@ window.envoyerAlerteNotification = function (titre, message) {
                 icon: '/assets/img/icons/web-app-manifest-192x192.png',
                 badge: '/assets/img/icons/favicon-96x96.png',
                 vibrate: [200, 100, 200, 100, 200], // Ca fait vibrer le téléphone 
-                tag: 'alerte-hothothot', // Ca écrase les anciennes notifications 
+                tag: 'alerte-' + Date.now(), // Ca écrase les anciennes notifications 
                 requireInteraction: true // Ca force la notification à rester à l'écran jusqu'à ce que l'utilisateur clique ou la ferme
             });
         });
