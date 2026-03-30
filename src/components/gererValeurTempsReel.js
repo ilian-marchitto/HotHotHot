@@ -42,14 +42,35 @@ export class C_gererValeurTempsReel {
         }
 
         let S_alerte = "";
+        let S_messageDetail = "";
         if (this.type === "exterieur") {
-            if (temperature > 35) S_alerte = "🔥 Hot Hot Hot !";
-            else if (temperature < 0) S_alerte = "🧊 Banquise en vue !";
+            if (temperature > 35) { 
+                S_alerte = "Hot Hot Hot !"; 
+                S_messageDetail = `La température exterieure est à ${temperature}°C.`;
+                envoyerAlerteNotification(S_alerte, S_messageDetail);
+            }
+            else if (temperature < 0) {
+                S_alerte = "Banquise en vue !";
+                S_messageDetail = `La température exterieure est à ${temperature}°C.`;
+                envoyerAlerteNotification(S_alerte, S_messageDetail);
+            }
         } else {
-            if (temperature > 50) S_alerte = "🚒 Appelez les pompiers ou arrêtez votre barbecue !";
-            else if (temperature > 22) S_alerte = "🌡️ Baissez le chauffage !";
-            else if (temperature < 0) S_alerte = "🥶 Canalisations gelées, appelez SOS plombier et mettez un bonnet !";
-            else if (temperature < 12) S_alerte = "🧥 Montez le chauffage ou mettez un gros pull !";
+            if (temperature > 50) {
+                S_alerte = "Appelez les pompiers ou arrêtez votre barbecue !";
+                S_messageDetail = `La température interieure est à ${temperature}°C.`;
+                envoyerAlerteNotification(S_alerte, S_messageDetail);
+            }
+            else if (temperature > 22) {
+                S_alerte = "Baissez le chauffage !";
+            }
+            else if (temperature < 0) {
+                S_alerte = "Canalisations gelées, appelez SOS plombier et mettez un bonnet !";
+            }
+            else if (temperature < 12) {
+                S_alerte = "Montez le chauffage ou mettez un gros pull !"; 
+                S_messageDetail = `La température interieure est à ${temperature}°C.`;
+                envoyerAlerteNotification(S_alerte, S_messageDetail);
+            }
         }
 
         if (S_alerte !== "") {

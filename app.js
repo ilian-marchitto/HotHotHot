@@ -64,3 +64,41 @@ window.addEventListener('appinstalled', () => {
 // Monitoring de l'état de la connectivité réseau
 window.addEventListener('online', () => console.log('Mode en ligne activé'));
 window.addEventListener('offline', () => console.log('Mode hors-ligne détecté'));
+
+
+// ----------------------------
+// --- GESTION NOTIFICATION ---
+// ----------------------------
+async function demanderPermissionNotification() {
+    // On vérifie si le navigateur supporte les notifications
+    if (!("Notification" in window)) {
+        console.warn("Ce navigateur ne supporte pas les notifications web.");
+        return;
+    }
+
+    // Si on n'a pas encore la permission, on la demande
+    if (Notification.permission !== "granted" && Notification.permission !== "denied") {
+        const permission = await Notification.requestPermission();
+        if (permission === "granted") {
+            console.log("L'utilisateur a accepté les notifications !");
+        } else {
+            console.log("L'utilisateur a refusé les notifications.");
+        }
+    }
+}
+demanderPermissionNotification();
+
+window.envoyerAlerteNotification = function (titre, message) {
+    if (Notification.permission === "granted") {
+        navigator.serviceWorker.ready.then((registration) => {
+            registration.showNotification(titre, {
+                body: message,
+                icon: '/assets/img/icons/web-app-manifest-192x192.png',
+                badge: '/assets/img/icons/favicon-96x96.png',
+                vibrate: [200, 100, 200, 100, 200], // Ca fait vibrer le téléphone 
+                tag: 'alerte-hothothot', // Ca écrase les anciennes notifications 
+                requireInteraction: true // Ca force la notification à rester à l'écran jusqu'à ce que l'utilisateur clique ou la ferme
+            });
+        });
+    }
+}
