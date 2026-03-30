@@ -1,0 +1,117 @@
+/* Retire les marges par défaut du navigateur */
+html, body {
+    margin: 0;
+    padding: 0;
+    width: 100%;
+    overflow-x: hidden; /* Évite un scroll horizontal parasite */
+}
+
+/* Modifie ton style header existant */
+header {
+    background-color: #1e3a8a; /* Bleu profond */
+    width: 100%; /* S'assure que le header prend tout l'espace */
+    padding: 1rem 0; /* Garde du padding haut/bas mais pas sur les côtés ici */
+    box-sizing: border-box; /* Pour que le padding ne dépasse pas des 100% */
+}
+
+header nav {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    /* Ajuste ces valeurs selon tes besoins */
+    padding: 0 2rem; /* Décale le logo et les boutons des bords de l'écran */
+    max-width: 100%; /* Enlève la limite de 1200px si tu veux que ça touche les bords */
+}
+
+/* Style du Logo */
+header .logo {
+    font-size: 1.6rem;
+    font-weight: 800;
+    text-decoration: none;
+    color: #ffffff; /* Le premier "Hot" est blanc */
+}
+
+header .logo .hot-red {
+    color: #dc2626; /* La couleur rouge brique/marron de ton image */
+}
+
+/* Liens de navigation */
+header .nav-links {
+    list-style: none;
+    display: flex;
+    gap: 30px;
+    margin: 0;
+    padding: 0;
+    align-items: center;
+}
+
+header .nav-links a {
+    color: #ffffff;
+    text-decoration: none;
+    font-weight: 500;
+    font-size: 0.95rem;
+}
+
+/* Bouton Déconnexion (Exactement comme l'image) */
+header .btn-logout {
+    background-color: #dc2626; /* Rouge plus sombre et terreux */
+    color: #ffffff !important;
+    padding: 6px 20px;
+    border-radius: 10px; /* Coins plus arrondis comme sur l'image */
+    font-weight: 500;
+    text-decoration: none;
+    transition: background 0.3s ease;
+}
+
+header .btn-logout:hover {
+    background-color: #8a3127;
+}
+
+/* Bouton Connexion (si affiché) */
+.btn-login {
+    background-color: #3b82f6;
+    color: white !important;
+    padding: 6px 20px;
+    border-radius: 10px;
+    text-decoration: none;
+    font-weight: 500;
+}
+
+/* Style du bouton Installer */
+#btn-install {
+    background-color: #83e2ff; /* Fond blanc comme sur ton image */
+    color: #1e3a8a;           /* Texte bleu marine pour le rappel */
+    border: 2px solid #83e2ff; /* Bordure cyan flash */
+    padding: 6px 15px;
+    border-radius: 5px;
+    font-weight: bold;
+    cursor: pointer;
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    transition: all 0.3s ease;
+    
+    /* On lance l'animation de pulsation */
+    animation: pulse-cyan 2s infinite;
+}
+
+/* Animation de pulsation lumineuse */
+@keyframes pulse-cyan {
+    0% {
+        box-shadow: 0 0 0 0 #dc2626;
+    }
+    70% {
+        /* Crée un halo lumineux qui s'étend */
+        box-shadow: 0 0 0 10px #cbc1c100;
+    }
+    100% {
+        box-shadow: 0 0 0 0 #3cc5dd00;
+    }
+}
+
+/* Effet au survol */
+#btn-install:hover {
+    background-color: #8bdaff;
+    color: #ffffff;
+    transform: scale(1.05); /* Grossit légèrement */
+}

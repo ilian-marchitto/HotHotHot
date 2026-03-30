@@ -1,0 +1,54 @@
+<!DOCTYPE html>
+<html lang="fr">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="stylesheet" href="../../assets/css/style.css">
+    <link rel="stylesheet" href="../../assets/css/header.css">
+    <link rel="stylesheet" href="../../assets/css/footer.css">
+    <script defer type="module" src="../core/script.js"></script>
+    <title>Mon compte - HotHotHot</title>
+</head>
+
+<body>
+    <header id="main-header"></header>
+
+    <main>
+        <section class="profil-card">
+            <h2>Mon Profil HotHotHot</h2>
+            <div class="user-info">
+                <p><strong>Bienvenue, </strong> <span id="user-display-name">Utilisateur</span></p>
+                <p><strong>Statut :</strong> Membre de l'IUT d'Aix-en-Provence</p>
+            </div>
+        </section>
+
+        <section class="historique-perso">
+            <h3>Mes relevés récents</h3>
+            <p>Retrouvez ici les dernières données enregistrées par vos capteurs :</p>
+            <ul id="historique-compte" class="historique-liste">
+            </ul>
+        </section>
+    </main>
+
+    <footer id="main-footer"></footer>
+
+    <script>
+        // Récupération du nom stocké lors de la "connexion"
+        const username = localStorage.getItem('username') || 'Utilisateur';
+        document.getElementById('user-display-name').textContent = username;
+
+        // Simulation d'un historique spécifique à l'utilisateur
+        // Dans un vrai projet, on irait chercher cela dans une base de données
+        /*const historiqueCompte = document.getElementById('historique-compte');
+        const fakeData = ["21.5°C (Salon)", "19.0°C (Chambre)", "24.0°C (SDB)"]; // Données issues de exempleJson.json
+
+        fakeData.forEach(data => {
+            const li = document.createElement('li');
+            li.textContent = data;
+            historiqueCompte.appendChild(li);
+        });*/
+    </script>
+</body>
+
+</html>
