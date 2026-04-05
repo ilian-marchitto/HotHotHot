@@ -15,6 +15,9 @@ class C_script {
         // 2. Initialisation des composants de données
         this.donneeAjax = new C_donneeAjax();
         this.sujetSurEcoute = this.donneeAjax.getSujet();
+        // Expose le sujet pour le graphe dans homepage.html
+        window.leSujet = this.sujetSurEcoute;
+        window.dispatchEvent(new CustomEvent("sujetPret", { detail: this.sujetSurEcoute }));
 
         // 3. Un gestionnaire par capteur
         this.gererValeurInt = new C_gererValeurTempsReel("interieur");

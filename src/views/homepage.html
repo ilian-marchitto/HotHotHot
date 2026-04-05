@@ -10,7 +10,30 @@
     <link rel="manifest" href="../../manifest.json">
     <script defer type="module" src="../core/script.js"></script>
     <script defer src="../../app.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/Chart.js/4.4.1/chart.umd.min.js"></script>
     <title>HotHotHot - Domotique</title>
+
+    <style>
+        #section-graphe {
+            margin: 1.5rem auto;
+            max-width: 700px;
+            padding: 1rem 1.5rem;
+            background: #fff;
+            border-radius: 12px;
+            box-shadow: 0 2px 10px rgba(0, 0, 0, 0.08);
+        }
+
+        #section-graphe h2 {
+            font-size: 1.1rem;
+            margin-bottom: 0.75rem;
+            color: #333;
+        }
+
+        #grapheSynthese {
+            width: 100% !important;
+            height: 260px !important;
+        }
+    </style>
 </head>
 
 <body>
@@ -25,6 +48,13 @@
 
     <section id="partieTemprature" role="tabpanel" aria-labelledby="dialogTitre"
         aria-describedby="dialogTemperature_interieur">
+
+        <!-- Graphe synthèse au-dessus des cartes -->
+        <div id="section-graphe">
+            <h2>📊 Synthèse des températures</h2>
+            <canvas id="grapheSynthese" role="img"
+                aria-label="Graphe à barres des températures intérieure et extérieure"></canvas>
+        </div>
 
         <div id="bordure_interieur" class="capteur-card bordure-verte" aria-live="assertive">
             <h3>Capteur Intérieur</h3>
@@ -57,6 +87,133 @@
     </section>
 
     <footer id="main-footer"></footer>
+
+    <script type="module">
+        /**
+         * C_grapheSynthese — observateur compatible avec sujetSurEcoute.subscribe()
+         *
+         * sujetSurEcoute appelle update(valeur, type) sur chaque abonné.
+         * On crée un objet avec une méthode update(), exactement comme
+         * C_gererValeurTempsReel et C_gererHistorique.
+         *
+         * Branchement : script.js doit dispatcher l'event "sujetPret" après
+         * avoir créé le sujet, et avant d'appeler recupererDonnees().
+         */
+
+        const MAX_POINTS = 10;
+
+        const etat = {
+            labels: [],
+            interieur: [],
+            exterieur: [],
+            dernierLabel: { interieur: null, exterieur: null }
+        };
+
+        // ── Création du graphe ──
+        const ctx = document.getElementById("grapheSynthese").getContext("2d");
+
+        const graphe = new Chart(ctx, {
+            type: "bar",
+            data: {
+                labels: etat.labels,
+                datasets: [
+                    {
+                        label: "Intérieur (°C)",
+                        data: etat.interieur,
+                        backgroundColor: "rgba(255, 140, 0, 0.75)",
+                        borderColor: "rgba(255, 140, 0, 1)",
+                        borderWidth: 1.5,
+                        borderRadius: 4,
+                    },
+                    {
+                        label: "Extérieur (°C)",
+                        data: etat.exterieur,
+                        backgroundColor: "rgba(30, 144, 255, 0.75)",
+                        borderColor: "rgba(30, 144, 255, 1)",
+                        borderWidth: 1.5,
+                        borderRadius: 4,
+                    }
+                ]
+            },
+            options: {
+                responsive: true,
+                maintainAspectRatio: false,
+                animation: { duration: 400 },
+                scales: {
+                    y: {
+                        min: -10,
+                        max: 40,
+                        title: { display: true, text: "°C" },
+                        grid: { color: "rgba(0,0,0,0.06)" }
+                    },
+                    x: { grid: { display: false } }
+                },
+                plugins: {
+                    legend: { position: "top" },
+                    tooltip: {
+                        callbacks: {
+                            label: c => `${c.dataset.label} : ${c.parsed.y}°C`
+                        }
+                    }
+                }
+            }
+        });
+
+        // ── Observateur — même interface que les autres abonnés ──
+        const observateurGraphe = {
+            update(valeur, type) {
+                const temperature = parseFloat(valeur);
+                if (isNaN(temperature)) return;
+
+                const heure = new Date().toLocaleTimeString("fr-FR");
+
+                if (etat.dernierLabel[type] !== heure) {
+                    etat.dernierLabel[type] = heure;
+
+                    if (type === "interieur") {
+                        etat.labels.push(heure);
+                        etat.interieur.push(temperature);
+                        if (etat.exterieur.length < etat.labels.length) etat.exterieur.push(null);
+                    } else {
+                        // extérieur : on remplace le null du dernier label si possible
+                        if (etat.labels.length > 0 && etat.exterieur.length === etat.labels.length) {
+                            etat.exterieur[etat.exterieur.length - 1] = temperature;
+                        } else {
+                            etat.labels.push(heure);
+                            etat.exterieur.push(temperature);
+                            if (etat.interieur.length < etat.labels.length) etat.interieur.push(null);
+                        }
+                    }
+
+                    // Fenêtre glissante
+                    if (etat.labels.length > MAX_POINTS) {
+                        etat.labels.shift();
+                        etat.interieur.shift();
+                        etat.exterieur.shift();
+                    }
+                } else {
+                    // Même seconde : mise à jour sur place
+                    const idx = etat.labels.length - 1;
+                    if (idx >= 0) {
+                        if (type === "interieur") etat.interieur[idx] = temperature;
+                        else etat.exterieur[idx] = temperature;
+                    }
+                }
+
+                graphe.update();
+            }
+        };
+
+        // ── Branchement sur le sujet ──
+        window.addEventListener("sujetPret", (e) => {
+            e.detail.subscribe(observateurGraphe);
+        });
+
+        // Fallback si le sujet est déjà dispo
+        if (window.leSujet) {
+            window.leSujet.subscribe(observateurGraphe);
+        }
+    </script>
 </body>
 
 </html>
