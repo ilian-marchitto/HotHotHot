@@ -1,5 +1,6 @@
 import { C_gererHistorique } from "../components/gererHistorique.js";
 import { C_gererValeurTempsReel } from "../components/gererValeurTempsReel.js";
+import { C_gererAlertes } from "../components/gererAlertes.js";
 import { C_donneeAjax } from "../services/donneeAjax.js";
 import { chargerLayout } from "../components/layout.js";
 
@@ -20,17 +21,25 @@ class C_script {
         this.gererValeurInt = new C_gererValeurTempsReel("interieur");
         this.gererValeurExt = new C_gererValeurTempsReel("exterieur");
         this.gererHistorique = new C_gererHistorique();
+        this.gererAlertes = new C_gererAlertes();
 
         // 4. Inscription des observateurs
         this.sujetSurEcoute.subscribe(this.gererValeurInt);
         this.sujetSurEcoute.subscribe(this.gererValeurExt);
         this.sujetSurEcoute.subscribe(this.gererHistorique);
+        this.sujetSurEcoute.subscribe(this.gererAlertes);
 
         // 5. Interactions de la page
         this.gestionnairePage();
 
-        // 6. Lancement des données
-        this.donneeAjax.recupererDonnees();
+        // 6. Expose le sujet après un tick pour laisser le temps
+        //    au <script type="module"> de index.html d'enregistrer son listener
+        window.leSujet = this.sujetSurEcoute;
+        setTimeout(() => {
+            window.dispatchEvent(new CustomEvent("sujetPret", { detail: this.sujetSurEcoute }));
+            // 7. Lancement des données (après que tous les abonnés sont prêts)
+            this.donneeAjax.recupererDonnees();
+        }, 0);
     }
 
     gestionnairePage() {

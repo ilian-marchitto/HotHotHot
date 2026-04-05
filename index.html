@@ -8,6 +8,7 @@
     <link rel="stylesheet" href="assets/css/header.css">
     <link rel="stylesheet" href="assets/css/footer.css">
     <link rel="manifest" href="manifest.json">
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/Chart.js/4.4.1/chart.umd.min.js"></script>
     <script defer type="module" src="src/core/script.js"></script>
     <script defer src="app.js"></script>
     <title>HotHotHot - Domotique</title>
@@ -25,6 +26,13 @@
 
     <section id="partieTemprature" role="tabpanel" aria-labelledby="dialogTitre"
         aria-describedby="dialogTemperature_interieur">
+
+        <!-- Graphe synthèse -->
+        <div id="section-graphe">
+            <h2>📊 Synthèse des températures</h2>
+            <canvas id="grapheSynthese" role="img"
+                aria-label="Graphe à barres des températures intérieure et extérieure"></canvas>
+        </div>
 
         <div id="bordure_interieur" class="capteur-card bordure-verte" aria-live="assertive">
             <h3>Capteur Intérieur</h3>
@@ -57,6 +65,115 @@
     </section>
 
     <footer id="main-footer"></footer>
+
+    <script type="module">
+        const MAX_POINTS = 10;
+
+        const etat = {
+            labels: [],
+            interieur: [],
+            exterieur: [],
+            dernierLabel: { interieur: null, exterieur: null }
+        };
+
+        const ctx = document.getElementById("grapheSynthese").getContext("2d");
+
+        const graphe = new Chart(ctx, {
+            type: "bar",
+            data: {
+                labels: etat.labels,
+                datasets: [
+                    {
+                        label: "Intérieur (°C)",
+                        data: etat.interieur,
+                        backgroundColor: "rgba(255, 140, 0, 0.75)",
+                        borderColor: "rgba(255, 140, 0, 1)",
+                        borderWidth: 1.5,
+                        borderRadius: 4,
+                    },
+                    {
+                        label: "Extérieur (°C)",
+                        data: etat.exterieur,
+                        backgroundColor: "rgba(30, 144, 255, 0.75)",
+                        borderColor: "rgba(30, 144, 255, 1)",
+                        borderWidth: 1.5,
+                        borderRadius: 4,
+                    }
+                ]
+            },
+            options: {
+                responsive: true,
+                maintainAspectRatio: false,
+                animation: { duration: 400 },
+                scales: {
+                    y: {
+                        min: -10,
+                        max: 40,
+                        title: { display: true, text: "°C" },
+                        grid: { color: "rgba(0,0,0,0.06)" }
+                    },
+                    x: { grid: { display: false } }
+                },
+                plugins: {
+                    legend: { position: "top" },
+                    tooltip: {
+                        callbacks: {
+                            label: c => `${c.dataset.label} : ${c.parsed.y}°C`
+                        }
+                    }
+                }
+            }
+        });
+
+        const observateurGraphe = {
+            update(valeur, type) {
+                const temperature = parseFloat(valeur);
+                if (isNaN(temperature)) return;
+
+                const heure = new Date().toLocaleTimeString("fr-FR");
+
+                if (etat.dernierLabel[type] !== heure) {
+                    etat.dernierLabel[type] = heure;
+
+                    if (type === "interieur") {
+                        etat.labels.push(heure);
+                        etat.interieur.push(temperature);
+                        if (etat.exterieur.length < etat.labels.length) etat.exterieur.push(null);
+                    } else {
+                        if (etat.labels.length > 0 && etat.exterieur.length === etat.labels.length) {
+                            etat.exterieur[etat.exterieur.length - 1] = temperature;
+                        } else {
+                            etat.labels.push(heure);
+                            etat.exterieur.push(temperature);
+                            if (etat.interieur.length < etat.labels.length) etat.interieur.push(null);
+                        }
+                    }
+
+                    if (etat.labels.length > MAX_POINTS) {
+                        etat.labels.shift();
+                        etat.interieur.shift();
+                        etat.exterieur.shift();
+                    }
+                } else {
+                    const idx = etat.labels.length - 1;
+                    if (idx >= 0) {
+                        if (type === "interieur") etat.interieur[idx] = temperature;
+                        else etat.exterieur[idx] = temperature;
+                    }
+                }
+
+                graphe.update();
+            }
+        };
+
+        window.addEventListener("sujetPret", (e) => {
+            e.detail.subscribe(observateurGraphe);
+        });
+
+        if (window.leSujet) {
+            window.leSujet.subscribe(observateurGraphe);
+        }
+    </script>
 </body>
 
 </html>
