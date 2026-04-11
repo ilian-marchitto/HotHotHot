@@ -10,7 +10,7 @@ export class sujetSurEcoute {
 
     notify() {
         this.observers.forEach(observer => {
-            observer.update(this.currentData.valeur, this.currentData.type);
+            observer.update(this.currentData.valeur, this.currentData.nom);
         });
     }
 
@@ -22,9 +22,5 @@ export class sujetSurEcoute {
             timestamp: timestamp
         };
         this.notify();
-    }
-
-    getCurrentData() {
-        return this.currentData;
     }
 }

@@ -1,26 +1,35 @@
 export class C_gererValeurTempsReel {
-    constructor(type) {
-        this.type = type;
-        this.O_firstValue = document.getElementById(`O_firstValue_${type}`);
-        this.O_elementDiv = document.getElementById(`bordure_${type}`);
-        this.O_commentaire = document.getElementById(`commentaire_${type}`);
-        this.O_temperatureMeter = document.getElementById(`temperatureMeter_${type}`);
-        this.O_minDisplay = document.getElementById(`tempMin_${type}`);
-        this.O_maxDisplay = document.getElementById(`tempMax_${type}`);
+    constructor(nomDuCapteur) {
+        this.type = nomDuCapteur; 
+
+        this.O_firstValue = document.getElementById(`O_firstValue_${nomDuCapteur}`);
+        this.O_elementDiv = document.getElementById(`bordure_${nomDuCapteur}`);
+        this.O_commentaire = document.getElementById(`commentaire_${nomDuCapteur}`);
+        this.O_temperatureMeter = document.getElementById(`temperatureMeter_${nomDuCapteur}`);
+        this.O_minDisplay = document.getElementById(`tempMin_${nomDuCapteur}`);
+        this.O_maxDisplay = document.getElementById(`tempMax_${nomDuCapteur}`);
 
         this.I_min = Infinity;
         this.I_max = -Infinity;
     }
 
-    update(temperatureRaw, type) {
-        // On ignore les données qui ne nous concernent pas
-        if (type !== this.type) return;
+    /**
+     * Méthode appelée par le Sujet
+     * @param {number|string} temperatureRaw - La valeur brute
+     * @param {string} nomRecu - Le nom du capteur ("interieur" ou "exterieur")
+     */
+    update(temperatureRaw, nomRecu) {
+
+        if (nomRecu !== this.type) return;
 
         const temperature = parseFloat(temperatureRaw);
+
         if (!this.O_firstValue || isNaN(temperature)) return;
 
         this.O_firstValue.textContent = temperature;
-        this.O_temperatureMeter.setAttribute("value", temperature);
+        if (this.O_temperatureMeter) {
+            this.O_temperatureMeter.setAttribute("value", temperature);
+        }
 
         if (temperature < this.I_min) {
             this.I_min = temperature;
@@ -31,45 +40,38 @@ export class C_gererValeurTempsReel {
             if (this.O_maxDisplay) this.O_maxDisplay.textContent = this.I_max;
         }
 
+        let s_classeCouleur = "bordure-verte"; // Par défaut
+
         if (temperature < 0) {
-            this.O_elementDiv.className = "capteur-card bordure-bleue";
-        } else if (temperature < 20) {
-            this.O_elementDiv.className = "capteur-card bordure-verte";
-        } else if (temperature < 30) {
-            this.O_elementDiv.className = "capteur-card bordure-orange";
-        } else {
-            this.O_elementDiv.className = "capteur-card bordure-rouge";
+            s_classeCouleur = "bordure-bleue";
+        } else if (temperature >= 20 && temperature < 30) {
+            s_classeCouleur = "bordure-orange";
+        } else if (temperature >= 30) {
+            s_classeCouleur = "bordure-rouge";
+        }
+
+        if (this.O_elementDiv) {
+            this.O_elementDiv.className = `capteur-card ${s_classeCouleur}`;
         }
 
         let S_alerte = "";
-        let S_messageDetail = "";
+        
         if (this.type === "exterieur") {
-            if (temperature > 35) { 
-                S_alerte = "Hot Hot Hot !"; 
-                S_messageDetail = `La température exterieure est à ${temperature}°C.`;
-                envoyerAlerteNotification(S_alerte, S_messageDetail);
-            }
-            else if (temperature < 0) {
+            if (temperature > 35) {
+                S_alerte = "Hot Hot Hot !";
+            } else if (temperature < 0) {
                 S_alerte = "Banquise en vue !";
-                S_messageDetail = `La température exterieure est à ${temperature}°C.`;
-                envoyerAlerteNotification(S_alerte, S_messageDetail);
             }
         } else {
+            // Capteur Intérieur
             if (temperature > 50) {
                 S_alerte = "Appelez les pompiers ou arrêtez votre barbecue !";
-                S_messageDetail = `La température interieure est à ${temperature}°C.`;
-                envoyerAlerteNotification(S_alerte, S_messageDetail);
-            }
-            else if (temperature > 22) {
+            } else if (temperature > 22) {
                 S_alerte = "Baissez le chauffage !";
-            }
-            else if (temperature < 0) {
+            } else if (temperature < 0) {
                 S_alerte = "Canalisations gelées, appelez SOS plombier et mettez un bonnet !";
-            }
-            else if (temperature < 12) {
-                S_alerte = "Montez le chauffage ou mettez un gros pull !"; 
-                S_messageDetail = `La température interieure est à ${temperature}°C.`;
-                envoyerAlerteNotification(S_alerte, S_messageDetail);
+            } else if (temperature < 12) {
+                S_alerte = "Montez le chauffage ou mettez un gros pull !";
             }
         }
 
@@ -79,6 +81,10 @@ export class C_gererValeurTempsReel {
             this.O_commentaire.setAttribute("role", "alert");
         } else {
             this.O_commentaire.hidden = true;
+        }
+
+        if (typeof envoyerAlerteNotification === "function" && S_alerte !== "") {
+            envoyerAlerteNotification(S_alerte, `La température ${this.type} est de ${temperature}°C`);
         }
     }
 }
