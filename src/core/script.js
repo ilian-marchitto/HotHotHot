@@ -10,34 +10,34 @@ class C_script {
     }
 
     async init() {
-        // 1. Chargement du Header et du Footer
+        // On charge le Header et le Footer
         await chargerLayout();
 
-        // 2. Initialisation des composants de données
+        // On initialise les composants de données
         this.donneeAjax = new C_donneeAjax();
         this.sujetSurEcoute = this.donneeAjax.getSujet();
 
-        // 3. Un gestionnaire par capteur
+        // On initialise un gestionnaire par capteur
         this.gererValeurInt = new C_gererValeurTempsReel("interieur");
         this.gererValeurExt = new C_gererValeurTempsReel("exterieur");
         this.gererHistorique = new C_gererHistorique();
         this.gererAlertes = new C_gererAlertes();
 
-        // 4. Inscription des observateurs
+        // On inscrit des observateurs
         this.sujetSurEcoute.subscribe(this.gererValeurInt);
         this.sujetSurEcoute.subscribe(this.gererValeurExt);
         this.sujetSurEcoute.subscribe(this.gererHistorique);
         this.sujetSurEcoute.subscribe(this.gererAlertes);
 
-        // 5. Interactions de la page
+        // On gère la page
         this.gestionnairePage();
 
-        // 6. Expose le sujet après un tick pour laisser le temps
+        // On expose le sujet après un tick pour laisser le temps
         //    au <script type="module"> de index.html d'enregistrer son listener
         window.leSujet = this.sujetSurEcoute;
         setTimeout(() => {
             window.dispatchEvent(new CustomEvent("sujetPret", { detail: this.sujetSurEcoute }));
-            // 7. Lancement des données (après que tous les abonnés sont prêts)
+            // On lance les données (après que tous les abonnés soient prêts)
             this.donneeAjax.recupererDonnees();
         }, 0);
     }
