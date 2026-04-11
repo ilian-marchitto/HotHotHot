@@ -1,57 +1,75 @@
 import { sujetSurEcoute } from "../core/sujetSurEcoute.js";
+
 export class C_donneeAjax {
     constructor() {
-        this.J_objetJson = null;
         this.leSujet = new sujetSurEcoute();
+        this.wsUrl = "wss://ws.hothothot.dog:9502";
+        this.cacheKey = "hothothot_last_data";
     }
 
     getSujet() {
         return this.leSujet;
     }
 
-    async recupererDonneesBrutes() {
-        try {
-            const reponse = await fetch('../../assets/data/exempleJson.json');
-
-            if (!reponse.ok) {
-                throw new Error(`Erreur HTTP ! Statut : ${reponse.status}`);
-            }
-
-            this.J_objetJson = await reponse.json();
-            return this.J_objetJson;
-
-        } catch (erreur) {
-            console.error("Impossible de charger le JSON :", erreur.message);
-        }
-    }
-
     async recupererDonnees() {
-
-        // On attend que les données soient chargées 
-        if (!this.J_objetJson) {
-            await this.recupererDonneesBrutes();
+        if (navigator.onLine) {
+            this.initWebsocket();
+        } else {
+            console.log("Mode Offline : Tentative de récupération du cache...");
+            this.chargerAlternativeCache();
         }
-
-        const liste = this.J_objetJson.capteurs;
-
-        let i = 0;
-        setInterval(() => {
-            if (i < liste.length) {
-                const capteur = liste[i];
-                i++;
-
-                const type = capteur.type;
-                const valeur = capteur.Valeur;
-                const nom = capteur.Nom;
-                const timestamp = capteur.Timestamp;
-
-                // On envoie les données au sujet
-                this.leSujet.nouvelleMesure(valeur, type, nom, timestamp);
-            } else {
-                i = 0; // Recommence à zéro pour simuler une boucle infinie de données
-            }
-        }, 2000);
     }
 
+    initWebsocket() {
+        const socket = new WebSocket(this.wsUrl);
 
+        socket.onopen = () => {
+            socket.send("Hello HotHotHot !");
+            console.log("WebSocket connecté. Données attendues dans 1 min...");
+        };
+
+        socket.onmessage = (event) => {
+            const data = JSON.parse(event.data);
+            
+            localStorage.setItem(this.cacheKey, event.data);
+            
+            this.traiterDonnees(data);
+        };
+
+        socket.onclose = () => {
+            console.warn("WebSocket déconnecté. Bascule sur l'alternative...");
+            this.chargerAlternativeCache();
+        };
+    }
+
+    traiterDonnees(data) {
+        if (data.capteurs) {
+            data.capteurs.forEach(capteur => {
+                this.leSujet.nouvelleMesure(
+                    capteur.Valeur, 
+                    capteur.type, 
+                    capteur.Nom, 
+                    capteur.Timestamp
+                );
+            });
+        }
+    }
+
+    async chargerAlternativeCache() {
+        const lastData = localStorage.getItem(this.cacheKey);
+        
+        if (lastData) {
+            console.log("Données chargées depuis le LocalStorage.");
+            this.traiterDonnees(JSON.parse(lastData));
+        } else {
+            console.log("Pas de cache, chargement du JSON local...");
+            try {
+                const reponse = await fetch('../../assets/data/exempleJson.json');
+                const data = await reponse.json();
+                this.traiterDonnees(data);
+            } catch (e) {
+                console.error("Plus aucune source de données disponible.");
+            }
+        }
+    }
 }
