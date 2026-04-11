@@ -1,0 +1,49 @@
+/* --- STYLES DE LA PAGE DOCUMENTATION --- */
+
+.doc-container {
+    padding: 30px;
+    max-width: 900px;
+    margin: 30px auto;
+    background: white;
+    border-radius: 12px;
+    box-shadow: 0 10px 25px rgba(0, 0, 0, 0.05);
+}
+
+.doc-main-title {
+    color: #1e3a8a;
+    text-align: center;
+    border-bottom: 3px solid #dc2626;
+    padding-bottom: 15px;
+    margin-bottom: 30px;
+}
+
+.doc-section {
+    margin-bottom: 40px;
+}
+
+.doc-section-title {
+    color: #1e3a8a;
+}
+
+.doc-subtitle {
+    color: #1e3a8a;
+    margin-top: 0;
+}
+
+.doc-link {
+    color: #3b82f6;
+    font-weight: bold;
+    text-decoration: none;
+}
+
+.doc-link:hover {
+    text-decoration: underline;
+}
+
+.doc-card {
+    background-color: #eff6ff;
+    padding: 15px;
+    border-left: 5px solid #3b82f6;
+    margin-bottom: 20px;
+    border-radius: 4px;
+}
