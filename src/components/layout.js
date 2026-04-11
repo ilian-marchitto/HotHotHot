@@ -9,7 +9,6 @@ export async function chargerLayout() {
         const htmlFooter = await respFooter.text();
         document.getElementById('main-footer').innerHTML = htmlFooter;
 
-        // --- GESTION DE LA CONNEXION ---
         gererAffichageConnexion();
 
     } catch (erreur) {
@@ -35,12 +34,11 @@ function gererAffichageConnexion() {
         liDeconnexion.hidden = true;
     }
 
-    // Gestion du clic sur déconnexion
     if (btnLogout) {
         btnLogout.addEventListener('click', (e) => {
             e.preventDefault();
             localStorage.removeItem('estConnecte');
-            window.location.reload(); // Recharge la page pour actualiser le header
+            window.location.reload();
         });
     }
 }

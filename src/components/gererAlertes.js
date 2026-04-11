@@ -1,23 +1,12 @@
-/**
- * C_gererAlertes
- * Observateur du sujetSurEcoute.
- * - Détecte les anomalies de température (intérieur + extérieur)
- * - Fait surgir une boîte de dialogue à chaque nouvelle alerte
- * - Conserve l'historique des alertes accessible via la cloche
- */
 export class C_gererAlertes {
     constructor() {
-        this.historique = []; // { heure, type, temperature, message, emoji }
+        this.historique = [];
 
         this._injecterUI();
         this._bindEvenements();
     }
 
-    // ─────────────────────────────────────────
-    // Injection du HTML de la modale + cloche
-    // ─────────────────────────────────────────
     _injecterUI() {
-        // Cloche dans le header (on l'ajoute dans le body, positionnée en fixed)
         const cloche = document.createElement("div");
         cloche.id = "alerte-cloche";
         cloche.setAttribute("role", "button");
@@ -29,7 +18,6 @@ export class C_gererAlertes {
         `;
         document.body.appendChild(cloche);
 
-        // Modale
         const modale = document.createElement("dialog");
         modale.id = "alerte-modale";
         modale.setAttribute("aria-labelledby", "alerte-titre");
@@ -48,7 +36,6 @@ export class C_gererAlertes {
         `;
         document.body.appendChild(modale);
 
-        // Styles injectés
         const style = document.createElement("style");
         style.textContent = `
             /* ── Cloche ── */
@@ -195,15 +182,11 @@ export class C_gererAlertes {
         document.head.appendChild(style);
     }
 
-    // ─────────────────────────────────────────
-    // Événements cloche + fermeture modale
-    // ─────────────────────────────────────────
     _bindEvenements() {
         const cloche = document.getElementById("alerte-cloche");
         const modale = document.getElementById("alerte-modale");
         const btnFermer = document.getElementById("alerte-fermer");
 
-        // Ouvrir la modale en mode "historique" depuis la cloche
         cloche.addEventListener("click", () => {
             this._ouvrirModaleHistorique();
         });
@@ -211,21 +194,15 @@ export class C_gererAlertes {
             if (e.key === "Enter" || e.key === " ") this._ouvrirModaleHistorique();
         });
 
-        // Fermer
         btnFermer.addEventListener("click", () => modale.close());
         modale.addEventListener("click", (e) => {
             if (e.target === modale) modale.close();
         });
 
-        // Réinitialiser le badge à l'ouverture
         modale.addEventListener("close", () => {
-            // on ne remet pas à zéro le badge ici — l'utilisateur peut rouvrir
         });
     }
 
-    // ─────────────────────────────────────────
-    // Ouvre la modale avec l'alerte courante
-    // ─────────────────────────────────────────
     _ouvrirModaleAlerte(alerte) {
         const modale = document.getElementById("alerte-modale");
         const msgActuel = document.getElementById("alerte-message-actuel");
@@ -238,9 +215,6 @@ export class C_gererAlertes {
         modale.showModal();
     }
 
-    // ─────────────────────────────────────────
-    // Ouvre la modale depuis la cloche (pas de message "actuel")
-    // ─────────────────────────────────────────
     _ouvrirModaleHistorique() {
         const modale = document.getElementById("alerte-modale");
         const msgActuel = document.getElementById("alerte-message-actuel");
@@ -261,9 +235,6 @@ export class C_gererAlertes {
         modale.showModal();
     }
 
-    // ─────────────────────────────────────────
-    // Met à jour la liste historique dans la modale
-    // ─────────────────────────────────────────
     _rafraichirHistoriqueUI() {
         const liste = document.getElementById("alerte-liste-historique");
         const compteur = document.getElementById("alerte-compteur");
@@ -277,28 +248,20 @@ export class C_gererAlertes {
         `).join("");
     }
 
-    // ─────────────────────────────────────────
-    // Anime la cloche + met à jour le badge
-    // ─────────────────────────────────────────
     _animerCloche() {
         const cloche = document.getElementById("alerte-cloche");
         const badge = document.getElementById("alerte-badge");
 
-        // Badge
         const count = this.historique.length;
         badge.textContent = count > 99 ? "99+" : count;
         badge.hidden = false;
 
-        // Animation shake
         cloche.classList.remove("shake");
-        void cloche.offsetWidth; // reflow pour relancer l'animation
+        void cloche.offsetWidth;
         cloche.classList.add("shake");
         cloche.addEventListener("animationend", () => cloche.classList.remove("shake"), { once: true });
     }
 
-    // ─────────────────────────────────────────
-    // Détection des anomalies
-    // ─────────────────────────────────────────
     _detecterAnomalies(temperature, type) {
         const label = type === "exterieur" ? "Extérieur" : "Intérieur";
         let message = "";
@@ -317,9 +280,6 @@ export class C_gererAlertes {
         return message ? { label, message, emoji } : null;
     }
 
-    // ─────────────────────────────────────────
-    // Interface observateur — appelée par sujetSurEcoute
-    // ─────────────────────────────────────────
     update(valeur, type) {
         const temperature = parseFloat(valeur);
         if (isNaN(temperature)) return;

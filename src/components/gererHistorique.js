@@ -50,8 +50,7 @@ export class C_gererHistorique {
             const label = nomRecu === "exterieur" ? "Extérieur" : "Intérieur";
             const li = document.createElement("li");
             li.innerHTML = `<strong>[${date}]</strong> ${label} : ${tempVal}°C`;
-            this.O_historique.prepend(li); // Le plus récent en haut, c'est plus ergonomique
-
+            this.O_historique.prepend(li);
             if (this.O_historique.children.length > 20) {
                 this.O_historique.removeChild(this.O_historique.lastChild);
             }
