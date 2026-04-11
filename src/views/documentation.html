@@ -7,12 +7,102 @@
     <link rel="stylesheet" href="../../assets/css/style.css">
     <link rel="stylesheet" href="../../assets/css/header.css">
     <link rel="stylesheet" href="../../assets/css/footer.css">
+    <link rel="stylesheet" href="../../assets/css/documentation.css">
     <script defer type="module" src="../core/script.js"></script>
     <title>Documentation</title>
 </head>
 
 <body>
     <header id="main-header"></header>
+
+    <main class="doc-container">
+
+        <h1 class="doc-main-title">
+            Documentation du Projet HotHotHot
+        </h1>
+
+        <section class="doc-section">
+            <h2 class="doc-section-title">L'équipe et Répartition des Rôles</h2>
+            <ul>
+                <li><strong>Ach Sofia :</strong> S'est occupée du style et de la conception du header et footer. Ajout
+                    du bouton d'installation. Récupération de l'ancien code météo et passage au propre.</li>
+                <li><strong>Burbeck Heather :</strong> A centralisé tous les différents chemins du projet. Création de
+                    l'architecture du projet et restructuration du code. Ajout d'un listener pour vérifier la connexion
+                    à internet.</li>
+                <li><strong>Celestine Samuel :</strong> A récupéré des données via le serveur WebSocket. Création du
+                    graphe pour visualiser l'évolution des températures en temps réel. Ajout de toutes les icônes pour
+                    la PWA. Ajout des capteurs extérieur et intérieur, gestion de l'historique des températures. Il
+                    s'est globalement occupé de tout ce qu'on voit à l'intérieur de la page d'accueil. Création des
+                    alertes de popups sur le site.</li>
+                <li><strong>Marchitto Ilian :</strong> A mis en place toute la PWA en regardant comment mettre le
+                    certificat HTTPS de la certification Windows (Heather s'est occupée de celui sur Linux). Création du
+                    manifest.json et de toute la logique des Service Workers avec la mise en cache de tous les projets
+                    et la gestion du mode hors ligne. Avec Sofia, création du bouton personnalisé d'installation de
+                    l'application. Rédaction de la documentation.</li>
+            </ul>
+        </section>
+
+        <section class="doc-section">
+            <h2 class="doc-section-title">Outils Utilisés et Organisation</h2>
+            <h3><strong>Gestion de projet & Planning :</strong></h3>
+            <p>Nous n'avons pas utilisé d'outil de gestion de projet ni de planification.</p>
+            <h3><strong>Environnement Technique :</strong></h3>
+            <ul>
+                <li><strong>Langages :</strong> HTML, CSS, JavaScript.</li>
+                <li><strong>PWA :</strong> Web App Manifest, Service Worker.</li>
+                <li><strong>Serveur de test :</strong> Live Server (avec localhost pour simuler le HTTPS nécessaire à la
+                    PWA).</li>
+                <li><strong>IA :</strong> Gemini pour toute la génération du style CSS.</li>
+            </ul>
+            <h3><strong>Dépôt Git :</strong></h3>
+            <p>L'intégralité du code est versionnée sur <strong>GitHub</strong>. <br>
+                <a href="https://github.com/ilian-marchitto/HotHotHot.git" target="_blank" class="doc-link">Lien vers le
+                    dépôt Git du projet</a>
+            </p>
+        </section>
+
+        <section class="doc-section">
+            <h2 class="doc-section-title">Principales Difficultés et Solutions</h2>
+
+            <div class="doc-card">
+                <h3 class="doc-subtitle">Difficulté n°1 : Le cycle de vie du bouton d'installation PWA</h3>
+                <p><strong>Le problème :</strong> Notre bouton d'installation était intégré dynamiquement dans un header
+                    chargé via <code>fetch()</code> (Asynchrone). Le script de la PWA tentait d'attacher un événement
+                    'click' sur ce bouton avant même qu'il n'existe dans le DOM, provoquant une erreur
+                    (<code>null</code>).</p>
+                <p><strong>La solution apportée :</strong> Nous avons implémenté le principe de <strong>Délégation
+                        d'événements</strong>. Plutôt que de cibler le bouton, nous écoutons les clics sur
+                    <code>document.body</code> et vérifions si l'élément cliqué possède l'ID du bouton. Nous avons
+                    également ajouté une vérification via CSS (<code>display-mode: standalone</code>) pour cacher
+                    définitivement le bouton si l'application est déjà installée.</p>
+            </div>
+
+            <div class="doc-card">
+                <h3 class="doc-subtitle">Difficulté n°2 : Gestion asynchrone des composants (Header/Footer) et des
+                    Chemins</h3>
+                <p><strong>Le problème :</strong> En modularisant le code (fichiers de config, layout.js), les chemins
+                    relatifs vers nos fichiers HTML ou JSON cassaient selon l'environnement d'exécution (serveur local
+                    vs machine d'un collègue), empêchant l'affichage de la page et la récupération des données.</p>
+                <p><strong>La solution apportée :</strong> Nous avons centralisé tous les chemins dans une constante
+                    globale <code>APP_CONFIG</code> en utilisant des chemins relatifs stricts (<code>./</code> au lieu
+                    de <code>/</code>) pour garantir que l'application s'exécute correctement depuis le dossier courant,
+                    peu importe la racine du serveur web utilisé.</p>
+            </div>
+        </section>
+
+        <section class="doc-section">
+            <h2 class="doc-section-title">Rétrospective : Ce que nous changerions</h2>
+            <p>Si nous devions recommencer ce projet aujourd'hui, voici ce que nous ferions différemment :</p>
+            <ul>
+                <li><strong>L'architecture initiale :</strong> Nous mettrions en place la structure modulaire (les
+                    imports/exports, le fichier de configuration) dès le premier jour, plutôt que de refactoriser un
+                    gros fichier <code>script.js</code> à mi-parcours. Cela nous aurait évité beaucoup de bugs de
+                    chemins.</li>
+                <li><strong>Faire des commits plus explicites pour la revue de code.</strong></li>
+            </ul>
+        </section>
+
+    </main>
 
     <footer id="main-footer"></footer>
 </body>
